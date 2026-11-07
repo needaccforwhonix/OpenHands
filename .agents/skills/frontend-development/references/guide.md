@@ -21,9 +21,13 @@ the shared exact legacy-token exceptions remain unchanged.
 
 ## Inline-style rollout
 
-`shadcn/no-inline-styles` runs at warning severity across source, including UI
-primitive implementations. Numeric CSS custom properties and semantic token
-references pass; hardcoded variable colors and style elements still warn.
+`shadcn/no-inline-styles` warns globally, including UI primitive implementations.
+Four clean appearance owners reject inline styles at error severity: divider,
+toggle-switch, combobox-caret and backend-status-dot. The exact paths live in
+`eslint.config.js`, with executable probes in
+`__tests__/scripts/inline-styles-lint.test.ts`; other owners retain warnings.
+Numeric CSS custom properties and semantic token references still pass in both
+scopes. Hardcoded variable colors and style elements remain findings.
 Do not add a blanket property allowance or blindly replace measured dimensions,
 portal coordinates, or renderer-library styles with static classes. Review the
 value's owner before moving it to classes or CSS variables.
@@ -39,6 +43,14 @@ Public skills are loaded from the `@openhands/extensions` npm package at build t
 Bundled catalog skills use the persisted `enabled_skills` allow-list defaulted from `DEFAULT_ENABLED_SKILL_NAMES`. User and project skills remain enabled unless listed in `disabled_skills`. Keep this logic centralized in `src/utils/skill-enablement.ts`. The Agent Server no longer clones the extensions repository or uses `EXTENSIONS_REF` for public skills.
 
 
+## Shared motion recipes
+
+`src/utils/form-control-classes.ts` uses named shell and transform recipes.
+Keep each transition's property list, timing fallback, duration fallback and
+important modifier intact; `transition-transform` includes more properties than
+the existing transform-only contract. Register custom transition and animation
+names in `cn` so later caller utilities retain Tailwind's conflict precedence.
+
 ## Workspace files
 
 Local Files discovery preferences belong to `misc_settings.app_preferences.workspace_file_discovery`, keyed by working directory on the active backend. `useWorkspaceFileDiscovery` reads the settings cache and saves sparse workspace patches. Preserve default exclusions and the 2,000-file cap when no configuration exists. Fetch one extra result to distinguish truncation from an exact-size list. Cloud keeps its server-side listing contract without these controls.
@@ -52,6 +64,13 @@ Use `isOpen` for rotation on `ComboboxCaretButton` and `ComboboxCaretInline`.
 `ComboboxCaretIcon` is the generic SVG and still permits caller orientation.
 Primitive implementations remain exempt from no-restyle. The existing narrow
 static-class exceptions do not imply that opaque values are checked by no-restyle.
+
+## Message wrapping recipes
+
+`message-word-break` retains `word-break: break-word` for chat bodies, corrective
+nudges and toast content. Toasts also use Tailwind's `wrap-anywhere` for their
+independent overflow-wrap behavior. Do not replace the former with `break-words`: it
+sets a different CSS property. Toast-library container styles remain library-owned.
 
 ## No Magic Strings
 
